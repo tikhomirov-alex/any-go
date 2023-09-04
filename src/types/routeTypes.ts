@@ -11,13 +11,13 @@ type Method =
   | 'trace'
   | 'patch'
 
-type Middleware = (req: Request, res: Response, next: NextFunction) => any
+export type Middleware = (req: Request, res: Response, next: NextFunction) => any
 
 export type Controller = (req: Request, res: Response) => any
 
 export type Route = {
   method: Method
-  path: string
+  path: String
   middleware: Middleware[]
   controller: Controller
 }

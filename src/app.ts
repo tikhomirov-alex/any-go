@@ -1,5 +1,8 @@
+import bodyParser from 'body-parser'
 import express from 'express'
 import mongoose from 'mongoose'
+import passport from 'passport'
+import passportConfig from './config/passport'
 import routes from './routes'
 import 'dotenv/config'
 
@@ -15,6 +18,12 @@ mongoose
   })
 
 const app = express()
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
+app.use(passport.initialize())
+passportConfig(passport)
 
 routes.forEach((route) => {
   const { method, path, middleware, controller } = route

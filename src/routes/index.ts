@@ -1,8 +1,6 @@
-import { Route } from "../types/types";
-import {routes as authRoutes} from './auth.route'
+import { Route } from '../types/routeTypes'
+import { routes as authRoutes } from './auth.route'
 
-const routes: Route[] = [
-  ...authRoutes
-]
+const routes: Route[] = [...authRoutes]
 
 export default routes

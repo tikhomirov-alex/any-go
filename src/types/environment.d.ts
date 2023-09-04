@@ -6,6 +6,7 @@ declare global {
       APP_PORT: string
       MONGO_URI: string
       ENV: 'dev' | 'prod'
+      JWT_SECRET: string
     }
   }
 }
