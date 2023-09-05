@@ -5,6 +5,12 @@ import { requestLog } from '../middleware/requestLog.middleware'
 
 export const routes: Route[] = [
   {
+    method: 'get',
+    path: 'auth',
+    middleware: [privateRoute, requestLog],
+    controller: getCurrentUser,
+  },
+  {
     method: 'post',
     path: 'auth/signup',
     middleware: [requestLog],
@@ -15,11 +21,5 @@ export const routes: Route[] = [
     path: 'auth/login',
     middleware: [requestLog],
     controller: login,
-  },
-  {
-    method: 'get',
-    path: 'auth/current',
-    middleware: [privateRoute, requestLog],
-    controller: getCurrentUser,
   },
 ]

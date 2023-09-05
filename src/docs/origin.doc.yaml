@@ -1,0 +1,161 @@
+openapi: 3.0.3
+info:
+  title: AnyGo API
+  version: '1.0'
+servers:
+  - url: 'localhost:5000/'
+    description: Local development server
+tags:
+  - name: auth
+    description: Authentication methods
+paths:
+  /auth:
+    get:
+      tags:
+        - auth
+      summary: Returns public user data by token
+      security:
+        - AnyGoAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/PublicUserData'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /auth/signup:
+    post:
+      tags:
+        - auth
+      summary: Registers a new user
+      requestBody:
+        $ref: '#/components/requestBodies/SignUpRequestData'
+      responses:
+        '200':
+          $ref: '#/components/responses/AuthData'
+        '400':
+          $ref: '#/components/responses/IncorrectInputDataError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Authenticates an existing user
+      requestBody:
+        $ref: '#/components/requestBodies/LoginRequestData'
+      responses:
+        '200':
+          $ref: '#/components/responses/AuthData'
+        '400':
+          $ref: '#/components/responses/IncorrectInputDataError'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  msg:
+                    type: string
+                    example: 'User not found'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  requestBodies:
+    SignUpRequestData:
+      description: User data for registering
+      content:
+        application/json:
+          schema:
+            required:
+              - email
+              - name
+              - password
+              - password2
+            properties:
+              email:
+                type: string
+                example: 'john_doe@example.com'
+              name:
+                type: string
+                example: 'John Doe'
+              username:
+                type: string
+                example: 'john_doe_99'
+              password:
+                type: string
+                example: 'MyStrongPass.99'
+              password2:
+                type: string
+                example: 'MyStrongPass.99'
+    LoginRequestData:
+      description: User data for login
+      content:
+        application/json:
+          schema:
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type: string
+                example: 'john_doe@example.com'
+              password:
+                type: string
+                example: 'MyStrongPass.99'
+  responses:
+    IncorrectInputDataError:
+      description: Incorrect input data
+      content:
+        application/json:
+          schema:
+            properties:
+              msg:
+                type: string
+                example: 'Passwords do not match'
+    UnauthorizedError:
+      description: User auth token not received by client
+      content:
+        text/plain:
+          example: 'Unauthorized'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            properties:
+              msg:
+                type: string
+                example: 'Server error: ...any reason...'
+    AuthData:
+      description: Successful authorization
+      content:
+        application/json:
+          schema:
+            properties:
+              token:
+                type: string
+                example: 'Bearer eyJhb...cLCi8'
+    PublicUserData:
+      description: Public user data
+      content:
+        application/json:
+          schema:
+            properties:
+              id:
+                type: string
+                example: '64f591d34f60c2bae4418607'
+              name:
+                type: string
+                example: 'John Doe'
+              username:
+                type: string
+                example: 'john_doe_99'
+              email:
+                type: string
+                example: 'john_doe@example.com'
+  securitySchemes:
+    AnyGoAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

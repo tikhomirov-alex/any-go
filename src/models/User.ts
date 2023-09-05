@@ -1,4 +1,4 @@
-import { Schema, model, SchemaTypes, SchemaType } from 'mongoose'
+import { Schema, model, SchemaTypes } from 'mongoose'
 
 export const UserSchema = new Schema(
   {
@@ -11,6 +11,7 @@ export const UserSchema = new Schema(
     username: {
       type: SchemaTypes.String,
       unique: true,
+      required: true,
       minLength: 3,
       maxLength: 30,
     },
@@ -21,7 +22,7 @@ export const UserSchema = new Schema(
     },
     password: {
       type: SchemaTypes.String,
-      required: false,
+      required: true,
     },
     emailConfirmed: {
       type: SchemaTypes.Boolean,

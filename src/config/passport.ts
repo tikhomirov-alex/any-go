@@ -7,13 +7,14 @@ import {
 import { User } from '../models/User'
 import { Payload } from '../types/jwtTypes'
 import 'dotenv/config'
+import { PassportStatic } from 'passport'
 
 const opt: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET,
 }
 
-const config = (passport) => {
+const config = (passport: PassportStatic) => {
   passport.use(
     new JwtStrategy(
       opt,
