@@ -14,7 +14,7 @@ paths:
       tags:
         - auth
       summary: Returns public user data by token
-      security:
+      security: 
         - AnyGoAuth: []
       responses:
         '200':
@@ -26,7 +26,7 @@ paths:
   /auth/signup:
     post:
       tags:
-        - auth
+       - auth
       summary: Registers a new user
       requestBody:
         $ref: '#/components/requestBodies/SignUpRequestData'
@@ -34,7 +34,7 @@ paths:
         '200':
           $ref: '#/components/responses/AuthData'
         '400':
-          $ref: '#/components/responses/IncorrectInputDataError'
+          $ref: '#/components/responses/IncorrectInputSignupDataError'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /auth/login:
@@ -48,7 +48,7 @@ paths:
         '200':
           $ref: '#/components/responses/AuthData'
         '400':
-          $ref: '#/components/responses/IncorrectInputDataError'
+          $ref: '#/components/responses/IncorrectInputLoginDataError'
         '404':
           description: User not found
           content:
@@ -104,15 +104,45 @@ components:
                 type: string
                 example: 'MyStrongPass.99'
   responses:
-    IncorrectInputDataError:
+    IncorrectInputSignupDataError:
       description: Incorrect input data
       content:
         application/json:
           schema:
             properties:
-              msg:
-                type: string
-                example: 'Passwords do not match'
+              errors:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: 'Email already exists'
+                  name:
+                    type: string
+                    example: 'Field name should be 3 to 30 characters'
+                  username: 
+                    type: string
+                    example: 'Username already exists'
+                  password:
+                    type: string
+                    example: 'Passwords do not match'
+                  password2:
+                    type: string
+                    example: 'Passwords do not match'
+    IncorrectInputLoginDataError:
+      description: Incorrect input data
+      content:
+        application/json:
+          schema:
+            properties:
+              errors:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: 'User not found'
+                  password:
+                    type: string
+                    example: 'Incorrect password'
     UnauthorizedError:
       description: User auth token not received by client
       content:

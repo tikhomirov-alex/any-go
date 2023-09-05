@@ -1,38 +1,41 @@
 import { Controller } from '../types/routeTypes'
-import { User } from '../models/User'
+import { User } from '../models/db/User'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { Payload } from '../types/jwtTypes'
+import { Payload } from '../types/extraTypes'
 import 'dotenv/config'
+import { validateSignupInput } from '../validation/auth.validation'
 
 export const signup: Controller = async (req, res) => {
   if (!process.env.JWT_SECRET) {
     console.log('Fatal error: environment variable JWT_SECRET is empty')
     process.exit(1)
   }
+
   try {
-    const { name, email, password, password2 } = req.body
+    const { errors, isValid } = validateSignupInput(req.body)
+    if (!isValid) {
+      return res.status(400).json(errors)
+    }
+
+    const { name, email, password } = req.body
     let username = req.body.username
 
     const userExists = await User.findOne({ email })
     if (userExists) {
-      return res.status(400).json({ msg: 'Email already exists.' })
+      errors.email = 'Email already exists'
+      return res.status(400).json(errors)
     }
 
     if (username) {
       const usernameExists = await User.findOne({ username })
       if (usernameExists) {
-        return res.status(400).json({ msg: 'This username already exists.' })
+        errors.username = 'This username already exists'
+        return res.status(400).json(errors)
       }
     } else {
       const userNumber = (await User.count()) + 1
       username = `user${userNumber}`
-    }
-
-    if (password !== password2) {
-      return res.status(400).json({
-        msg: 'Passwords do not match',
-      })
     }
 
     const salt = await bcrypt.genSalt(10)
@@ -66,18 +69,21 @@ export const login: Controller = async (req, res) => {
     console.log('Fatal error: environment variable JWT_SECRET is empty')
     process.exit(1)
   }
+
   try {
     const { email, password } = req.body
 
     const user = await User.findOne({ email })
     if (!user) {
-      return res.status(404).json({ msg: 'User not found' })
+      return res.status(404).json({ errors: { email: 'User not found' } })
     }
 
     const isMatch = await bcrypt.compare(password, user.password)
 
     if (!isMatch) {
-      return res.status(400).json({ msg: 'Incorrect password' })
+      return res
+        .status(400)
+        .json({ errors: { password: 'Incorrect password' } })
     }
 
     const payload: Payload = {

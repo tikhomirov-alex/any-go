@@ -55,7 +55,7 @@
             "$ref": "#/components/responses/AuthData"
           },
           "400": {
-            "$ref": "#/components/responses/IncorrectInputDataError"
+            "$ref": "#/components/responses/IncorrectInputSignupDataError"
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -77,7 +77,7 @@
             "$ref": "#/components/responses/AuthData"
           },
           "400": {
-            "$ref": "#/components/responses/IncorrectInputDataError"
+            "$ref": "#/components/responses/IncorrectInputLoginDataError"
           },
           "404": {
             "description": "User not found",
@@ -165,15 +165,60 @@
       }
     },
     "responses": {
-      "IncorrectInputDataError": {
+      "IncorrectInputSignupDataError": {
         "description": "Incorrect input data",
         "content": {
           "application/json": {
             "schema": {
               "properties": {
-                "msg": {
-                  "type": "string",
-                  "example": "Passwords do not match"
+                "errors": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "Email already exists"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Field name should be 3 to 30 characters"
+                    },
+                    "username": {
+                      "type": "string",
+                      "example": "Username already exists"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "Passwords do not match"
+                    },
+                    "password2": {
+                      "type": "string",
+                      "example": "Passwords do not match"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "IncorrectInputLoginDataError": {
+        "description": "Incorrect input data",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errors": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "User not found"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "Incorrect password"
+                    }
+                  }
                 }
               }
             }
