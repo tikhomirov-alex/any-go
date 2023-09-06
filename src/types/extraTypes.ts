@@ -4,7 +4,11 @@ export type Payload = {
   username: string
 }
 
-export type ValidationResult<T> = {
-  errors: T
+export interface Errors {
+  [key: string]: string
+}
+
+export type ValidationResult = {
+  errors: Errors
   isValid: boolean
 }
