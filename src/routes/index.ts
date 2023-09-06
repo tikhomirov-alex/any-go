@@ -1,5 +1,5 @@
 import { Route } from '../types/routeTypes'
-import { routes as authRoutes } from './auth.route'
+import { routes as authRoutes } from './auth.routes'
 
 const routes: Route[] = [...authRoutes]
 

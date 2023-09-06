@@ -1,4 +1,4 @@
-export interface SignupInputData {
+export type SignupInputData = {
   name: string
   surname: string
   email: string
@@ -7,7 +7,7 @@ export interface SignupInputData {
   password2: string
 }
 
-export interface LoginInputData {
+export type LoginInputData = {
   email: string
   password: string
 }

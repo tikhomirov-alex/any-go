@@ -6,8 +6,8 @@ const UserSchema = new Schema(
       type: SchemaTypes.String,
       unique: true,
       required: true,
-      minLength: 3,
-      maxLength: 30,
+      minLength: 6,
+      maxLength: 20,
     },
     email: {
       type: SchemaTypes.String,
@@ -21,8 +21,8 @@ const UserSchema = new Schema(
     password: {
       type: SchemaTypes.String,
       required: true,
-    }
-  },  
+    },
+  },
   { timestamps: false, versionKey: false }
 )
 

@@ -4,7 +4,7 @@ import {
   VerifiedCallback,
   StrategyOptions,
 } from 'passport-jwt'
-import { User } from '../models/db/User'
+import { User } from '../models/User'
 import { Payload } from '../types/extraTypes'
 import 'dotenv/config'
 import { PassportStatic } from 'passport'

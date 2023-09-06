@@ -4,7 +4,7 @@ export type Payload = {
   username: string
 }
 
-export interface Errors {
+export type Errors = {
   [key: string]: string
 }
 
