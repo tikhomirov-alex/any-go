@@ -2,6 +2,7 @@ import {
   getProfileByUserId,
   updateProfile,
 } from '../controllers/profile.controller'
+import { privateRoute } from '../middleware/private.middleware'
 import { Route } from '../types/routeTypes'
 
 export const routes: Route[] = [
@@ -13,8 +14,8 @@ export const routes: Route[] = [
   },
   {
     method: 'put',
-    path: 'profiles/:profile_id',
-    middleware: [],
+    path: 'profiles',
+    middleware: [privateRoute],
     controller: updateProfile,
   },
 ]

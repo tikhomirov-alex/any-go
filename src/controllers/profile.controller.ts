@@ -26,10 +26,10 @@ export const updateProfile: Controller = async (req, res) => {
       return res.status(400).json(errors)
     }
 
-    const { name, surname, birthday, avatar, city, about } = req.body
-    const profileId = req.params.profile_id
+    const user: any = req.user
+    const profile = await Profile.findOne({ user: user.id })
 
-    const profile = await Profile.findOne({ id: profileId })
+    const { name, surname, birthday, avatar, city, about } = req.body
 
     if (!profile) {
       return res
@@ -46,8 +46,9 @@ export const updateProfile: Controller = async (req, res) => {
       about,
     })
 
-    res.status(200).json(profile)
+    await profile.save()
 
+    res.status(200).json(profile)
   } catch (err: any) {
     res.status(500).json({ msg: `Server error: ${err}` })
   }

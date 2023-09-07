@@ -40,7 +40,7 @@ async function main() {
     app[method](`/api/${path}`, ...middleware, controller)
   })
 
-  const swaggerDocPath = require('./docs/output.doc.json')
+  const swaggerDocPath = require('./docs/openapi.json')
   app.use(
     '/api-docs',
     swaggerUi.serve,
@@ -52,7 +52,3 @@ async function main() {
 }
 
 main()
-  .catch(console.log)
-  .finally(async () => {
-    await mongoose.disconnect()
-  })

@@ -14,6 +14,10 @@
     {
       "name": "auth",
       "description": "Authentication methods"
+    },
+    {
+      "name": "profiles",
+      "description": "Profile data methods"
     }
   ],
   "paths": {
@@ -99,9 +103,105 @@
           }
         }
       }
+    },
+    "/profiles/{user_id}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "user_id",
+            "schema": {
+              "required": [
+                "user_id"
+              ],
+              "properties": {
+                "user_id": {
+                  "type": "string",
+                  "example": "64f591d34f60c2bae4400000"
+                }
+              }
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "tags": [
+          "profiles"
+        ],
+        "summary": "Returns user profile data",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/UserProfileData"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/profiles": {
+      "put": {
+        "tags": [
+          "profiles"
+        ],
+        "summary": "Update a profile by its id",
+        "security": [
+          {
+            "AnyGoAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/UserProfileData"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
     }
   },
   "components": {
+    "schemas": {
+      "Profile": {
+        "description": "User profile data",
+        "type": "object",
+        "required": [
+          "name",
+          "surname"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Илон"
+          },
+          "surname": {
+            "type": "string",
+            "example": "Маск"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date",
+            "example": "2001-01-01"
+          },
+          "avatar": {
+            "type": "string",
+            "format": "url",
+            "example": "\\images\\2023\\08\\01\\1694079068000.jpg"
+          },
+          "city": {
+            "type": "string",
+            "example": "Москва"
+          },
+          "about": {
+            "type": "string",
+            "example": "Меня зовут Илон Маск и я очень люблю сервис AnyGo :D"
+          }
+        }
+      }
+    },
     "requestBodies": {
       "SignUpRequestData": {
         "description": "User data for registering",
@@ -271,7 +371,7 @@
               "properties": {
                 "id": {
                   "type": "string",
-                  "example": "64f591d34f60c2bae4418607"
+                  "example": "64f591d34f60c2bae4400000"
                 },
                 "name": {
                   "type": "string",
@@ -286,6 +386,16 @@
                   "example": "john_doe@example.com"
                 }
               }
+            }
+          }
+        }
+      },
+      "UserProfileData": {
+        "description": "User profile data",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Profile"
             }
           }
         }

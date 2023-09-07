@@ -40,7 +40,7 @@ export const validateProfileInput = (
   }
 
   // Check city
-  if (city && !Validator.matches(city, /^[А-ЯЁ-/s]+$/gi)) {
+  if (city && !Validator.matches(city, /^[А-ЯЁ\-/s]+$/gi)) {
     errors.city = 'Город может содержать кириллицу, дефис и пробел'
   }
 
