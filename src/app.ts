@@ -4,7 +4,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import passport from 'passport'
 import passportConfig from './config/passport'
-import routes from './routes'
+import { routes } from './routes'
 import swaggerUi from 'swagger-ui-express'
 import 'dotenv/config'
 

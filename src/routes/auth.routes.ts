@@ -1,13 +1,13 @@
 import { getCurrentUser, login, signup } from '../controllers/auth.controller'
-import { Route } from '../types/routeTypes'
 import { privateRoute } from '../middleware/private.middleware'
 import { requestLog } from '../middleware/requestLog.middleware'
+import { Route } from '../types/routeTypes'
 
 export const routes: Route[] = [
   {
     method: 'get',
     path: 'auth',
-    middleware: [privateRoute, requestLog],
+    middleware: [requestLog, privateRoute],
     controller: getCurrentUser,
   },
   {

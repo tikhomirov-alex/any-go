@@ -1,4 +1,4 @@
-import { Schema, SchemaTypes, model } from 'mongoose'
+import { model, Schema, SchemaTypes } from 'mongoose'
 
 const ProfileSchema = new Schema(
   {

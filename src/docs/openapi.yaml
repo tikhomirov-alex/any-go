@@ -10,6 +10,8 @@ tags:
     description: Authentication methods
   - name: profiles
     description: Profile data methods
+  - name: friends
+    description: Friendship
 paths:
   /auth:
     get:
@@ -52,14 +54,7 @@ paths:
         '400':
           $ref: '#/components/responses/IncorrectInputLoginDataError'
         '404':
-          description: User not found
-          content:
-            application/json:
-              schema:
-                properties:
-                  msg:
-                    type: string
-                    example: 'User not found'
+          $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /profiles/{user_id}:
@@ -84,10 +79,25 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /profiles:
+    get:
+      tags:
+        - profiles
+      summary: Gets all profiles
+      responses:
+        '200':
+          description: Succesful got all profiles
+          content:
+            application/json:
+              schema:
+                properties:
+                  profiles:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Profile'
     put:
       tags:
         - profiles
-      summary: Update a profile by its id
+      summary: Updates a profile by its id
       security: 
         - AnyGoAuth: []
       responses:
@@ -95,6 +105,120 @@ paths:
           $ref: '#/components/responses/UserProfileData'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /friends/{friend_id}:
+    get:
+      parameters:
+        - name: friend_id
+          schema:
+            required:
+              - friend_id
+            properties:
+              user_id:
+                type: string
+                example: '64f591d34f60c2bae4400000'
+          in: path
+          required: true
+      tags:
+        - friends
+      summary: Request for friendship
+      security: 
+        - AnyGoAuth: []
+      responses:
+        '201':
+          $ref: '#/components/responses/FriendshipData'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      parameters:
+        - name: friend_id
+          schema:
+            required:
+              - friend_id
+            properties:
+              user_id:
+                type: string
+                example: '64f591d34f60c2bae4400000'
+          in: path
+          required: true
+      tags:
+        - friends
+      summary: Request for friendship
+      security: 
+        - AnyGoAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/FriendshipData'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /friends/accept/{friend_id}:
+    get:
+      parameters:
+        - name: friend_id
+          schema:
+            required:
+              - friend_id
+            properties:
+              user_id:
+                type: string
+                example: '64f591d34f60c2bae4400000'
+          in: path
+          required: true
+      tags:
+        - friends
+      summary: Request for friendship
+      security: 
+        - AnyGoAuth: []
+      responses:
+        '201':
+          $ref: '#/components/responses/FriendshipData'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /friends/unsubscribe/{friend_id}:
+    delete:
+      parameters:
+        - name: friend_id
+          schema:
+            required:
+              - friend_id
+            properties:
+              user_id:
+                type: string
+                example: '64f591d34f60c2bae4400000'
+          in: path
+          required: true
+      tags:
+        - friends
+      summary: Request for friendship
+      security: 
+        - AnyGoAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  msg:
+                    type: string
+                    example: 'Success'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -126,6 +250,23 @@ components:
         about:
           type: string
           example: 'Меня зовут Илон Маск и я очень люблю сервис AnyGo :D'
+    Friendship:
+      description: User relations
+      type: object
+      required:
+        - user1
+        - user2
+        - status
+      properties:
+        user1:
+          type: string
+          example: 64f591d34f60c2bae4400000
+        user2:
+          type: string
+          example: 64f591d34f60c2bae4400000
+        status:
+          type: number
+          enum: [1, 2, 3]
   requestBodies:
     SignUpRequestData:
       description: User data for registering
@@ -213,6 +354,15 @@ components:
       content:
         text/plain:
           example: 'Unauthorized'
+    NotFoundError:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            properties:
+              msg:
+                type: string
+                example: '... not found'
     InternalServerError:
       description: Internal server error
       content:
@@ -255,6 +405,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Profile'
+    FriendshipData:
+      description: User relations
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Friendship'
   securitySchemes:
     AnyGoAuth:
       type: http

@@ -1,14 +1,14 @@
-import { Controller } from '../types/routeTypes'
-import { User } from '../models/User'
 import bcrypt from 'bcryptjs'
+import { Controller } from '../types/routeTypes'
 import jwt from 'jsonwebtoken'
+import mongoose from 'mongoose'
 import { Payload } from '../types/extraTypes'
+import { Profile } from '../models/Profile'
 import {
   validateLoginInput,
   validateSignupInput,
 } from '../validation/auth.validation'
-import { Profile } from '../models/Profile'
-import mongoose from 'mongoose'
+import { User } from '../models/User'
 
 export const signup: Controller = async (req, res) => {
   if (!process.env.JWT_SECRET) {

@@ -1,13 +1,13 @@
 import {
-  Strategy as JwtStrategy,
   ExtractJwt,
-  VerifiedCallback,
+  Strategy as JwtStrategy,
   StrategyOptions,
+  VerifiedCallback,
 } from 'passport-jwt'
-import { User } from '../models/User'
 import { Payload } from '../types/extraTypes'
-import 'dotenv/config'
 import { PassportStatic } from 'passport'
+import { User } from '../models/User'
+import 'dotenv/config'
 
 const opt: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

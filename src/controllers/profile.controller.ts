@@ -1,6 +1,17 @@
-import { Profile } from '../models/Profile'
 import { Controller } from '../types/routeTypes'
+import { Profile } from '../models/Profile'
 import { validateProfileInput } from '../validation/profile.validation'
+
+export const getProfiles: Controller = async (req, res) => {
+  try {
+    
+    const profiles = await Profile.find().populate(['name', 'surname', 'avatar', 'city'])
+    res.status(200).json(profiles)
+
+  } catch (err: any) {
+    res.status(500).json({ msg: `Server error: ${err}` })
+  }
+}
 
 export const getProfileByUserId: Controller = async (req, res) => {
   try {

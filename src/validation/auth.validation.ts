@@ -1,7 +1,7 @@
-import Validator from 'validator'
-import { LoginInputData, SignupInputData } from './models/AuthData'
 import { Errors, ValidationResult } from '../types/extraTypes'
 import { isEmpty } from './isEmpty'
+import { LoginInputData, SignupInputData } from './models/AuthData'
+import Validator from 'validator'
 
 export const validateSignupInput = (
   data: SignupInputData
